@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from HexBoard import HexBoard
-from HexPlayer import AStarHexPlayer  # Tu jugador implementado
+from HexPlayer import MyPlayer  # Tu jugador implementado
 
 class HexGUI:
     def __init__(self, size=5):
@@ -15,7 +15,7 @@ class HexGUI:
         
         # Configurar tablero y jugadores
         self.board = HexBoard(size)
-        self.ai_player = AStarHexPlayer(player_id=2)
+        self.ai_player = MyPlayer(player_id=2)
         self.current_player = 1
         
         # Calcular dimensiones del canvas
@@ -127,5 +127,5 @@ class HexGUI:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    gui = HexGUI(size=7)
+    gui = HexGUI(size=15)
     gui.run()
