@@ -1,4 +1,4 @@
-import HexBoard
+from board import HexBoard
 
 class Player:
     def __init__(self, player_id: int):
