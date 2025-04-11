@@ -1,5 +1,4 @@
 import math
-import heapq
 import numpy as np
 import time
 from board import HexBoard
@@ -23,12 +22,10 @@ class HexPlayer(Player):
         self.center_weights = None
         self.max_moves = None 
         
-        print(f"c {player_id}")
 
     def play(self, board: HexBoard, time_limit: float) -> tuple:
         possible_moves = board.get_possible_moves()
-        time_limit=time_limit-0.30 #Ajustar tiempo por si acaso
-        print(len(possible_moves))
+        time_limit=time_limit-0.15 #Ajustar tiempo por si acaso
         
         if not possible_moves: #Por si acaso(nunca debería entrar)
             return None

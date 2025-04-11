@@ -3,8 +3,8 @@ from testplayer import AIPlayer
 from player import HexPlayer
 
 def test_hex_game():
-    board = HexBoard(5)
-    player1 = AIPlayer(1, 1)
+    board = HexBoard(15)
+    player1 = AIPlayer(1,2)
     player2 = HexPlayer(2)
     
     current_player = 1
@@ -18,7 +18,7 @@ def test_hex_game():
             print(f"\nTurno Jugador {current_player}")
             if current_player==2:
                 print(f"www")
-                move = players[current_player].play(board,1)
+                move = players[current_player].play(board,2)
             else:
                 print(f"uuu")
                 move = players[current_player].play(board)
