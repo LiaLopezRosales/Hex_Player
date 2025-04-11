@@ -2,7 +2,7 @@ import math
 import time
 import random
 from board import HexBoard
-from player_base import Player
+from player import Player
 from collections import deque
 
 class AIPlayer(Player):

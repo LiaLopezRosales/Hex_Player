@@ -1,6 +1,6 @@
 from board import HexBoard
-from player import AIPlayer
-from HexPlayer import HexPlayer
+from testplayer import AIPlayer
+from player import HexPlayer
 
 def test_hex_game():
     board = HexBoard(5)

@@ -3,7 +3,13 @@ import heapq
 import numpy as np
 import time
 from board import HexBoard
-from player_base import Player
+
+class Player:
+    def __init__(self, player_id: int):
+        self.player_id = player_id  # Tu identificador (1 o 2)
+
+    def play(self, board: HexBoard) -> tuple:
+        raise NotImplementedError("¡Implementa este método!")
     
 class HexPlayer(Player):
     def __init__(self, player_id: int):
