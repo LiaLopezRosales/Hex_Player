@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+\title{Jugador de Hex}
+\author{Lia Stephanie López Rosales}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+El jugador implementado utiliza una combinación de:
+\begin{itemize}
+    \item Heurísticas posicionales
+    \item Búsqueda Minimax con poda alfa-beta
+    \item Ajustes dinámicos tanto en las heurísticas como en la búsqueda
+\end{itemize}
+
+\section{Heurísticas}
+\subsection{Peso a los Bordes (\texttt{edge\_weights})}
+\textbf{Objetivo:} Favorece celdas cercanas a los bordes objetivo.\\
+\textbf{Implementación:}
+\begin{equation*}
+    \text{edge\_weights}(i,j) = 
+    \begin{cases}
+        \min(y+1, size-y) & \text{jugador horizontal} \\
+        \min(x+1, size-x) & \text{jugador vertical}
+    \end{cases}
+\end{equation*}
+
+\textbf{Efectividad:} Controlar celdas adyacentes a los bordes propios permite construir puentes ganadores posteriormente.
+
+\subsection{Peso al Centro (\texttt{center\_weights})}
+\textbf{Objetivo:} Valora posiciones centrales estratégicas.\\
+\textbf{Implementación:}
+\begin{equation*}
+    \text{center\_weights}(i,j) = \frac{1}{1 + \sqrt{(i-c)^2 + (j-c)^2}},\quad c = \frac{size-1}{2}
+\end{equation*}
+
+\textbf{Efectividad:} Una celda central tiene 6 vecinos vs 3 en bordes, maximizando opciones de expansión.
+
+\subsection{Bonificación por Puentes (\texttt{bridge\_bonus})}
+\textbf{Objetivo:} Incentiva conexiones diagonales que forman "puentes".\\
+\textbf{Implementación:}
+\begin{equation*}
+    \text{bridge\_bonus}(i,j) = 
+    \begin{cases}
+        2 & (i+j) \equiv 0 \mod 2 \\
+        1 & \text{otherwise}
+    \end{cases}
+\end{equation*}
+
+\textbf{Efectividad:} Dos piezas en puente crean caminos duales $\Rightarrow$ inmunidad a bloqueos simples.
+
+\subsection{Penalización por Cercanía al Oponente (\texttt{opponent\_penalty})}
+\textbf{Objetivo:} Desincentivar la colocación de piezas en zonas controladas por el oponente.\\
+\textbf{Implementación:}
+\begin{equation*}
+    \text{opponent\_penalty}(i,j) = 1.5 - 0.5 \cdot \frac{|i - j|}{\text{size}}
+\end{equation*}
+
+\textbf{Efectividad:} Evitar intentar conectar bpor una zona fácilmente bloqueable o donde ya no es posible conectar
+
+\section{Función de Evaluación}
+Combina componentes con pesos adaptativos:
+\begin{equation*}
+    \text{Valor} = 0.6P + 0.3C + 0.1A + 0.3M
+\end{equation*}
+donde:
+\begin{align*}
+    P & = \text{Control posicional (Bordes)} \\
+    C & = \text{Conexiones potenciales(Bonificación por Puentes)} \\
+    A & = \text{Control de área(Penalización por Cercanía al Oponente)} \\
+    M & = \text{Influencia central}
+\end{align*}
+
+\section{Ordenamiento de Movimientos}
+Algoritmo de priorización:
+\begin{enumerate}
+    \item Calcular score por celda: 
+    \begin{equation*}
+        \text{score} = \underbrace{w_e}_{\text{borde}} + \underbrace{w_c}_{\text{centro}} + \underbrace{0.8w_b}_{\text{puente}} - \underbrace{0.6w_o}_{\text{oponente}}
+    \end{equation*}
+    \item Ordenar descendente
+    \item Podar el 40\% inferior en fase tardía
+\end{enumerate}
+
+\end{document}
